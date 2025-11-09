@@ -3,27 +3,76 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Praveen Sharma</title>
+  <title>YOUR NAME</title>
   <style>
-    body { font: 16px/1.6 system-ui, sans-serif; max-width: 720px; margin: 48px auto; padding: 0 16px; }
-    h1 { margin-bottom: 0; } .muted { color: #666; }
-    nav a { margin-right: 12px; text-decoration: none; }
+    :root {
+      --base: #191724;
+      --moon: #232136;
+      --dawn: #faf4ed;
+      --love: #eb6f92;
+      --foam: #9ccfd8;
+      --gold: #f6c177;
+    }
+
+    body {
+      background: var(--base);
+      color: var(--dawn);
+      font-family: system-ui, sans-serif;
+      max-width: 720px;
+      margin: 64px auto;
+      padding: 0 16px;
+      line-height: 1.7;
+    }
+
+    h1 {
+      color: var(--foam);
+      margin-bottom: 0.2em;
+    }
+
+    h2 {
+      color: var(--love);
+      margin-top: 1.5em;
+    }
+
+    a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--foam);
+    }
+
+    nav {
+      background: var(--moon);
+      padding: 10px 16px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+    }
+
+    nav a {
+      margin-right: 12px;
+    }
+
+    .muted {
+      color: #908caa;
+    }
   </style>
 </head>
 <body>
-  <h1>Hi, I'm Praveen Sharma</h1>
-  <p class="muted">Security researcher • Tech Enthusiast</p>
-
   <nav>
     <a href="/">Home</a>
-    <a href="https://github.com/praveenxsharma">GitHub</a>
+    <a href="https://github.com/YOURNAME">GitHub</a>
   </nav>
 
+  <h1>Hi, I'm YOUR NAME</h1>
+  <p class="muted">Security Researcher • Cyber Enthusiast</p>
+
   <h2>About</h2>
-  <p>I break things so others are safer.</p>
+  <p>I explore the intersection of web security and ethical hacking.</p>
 
   <h2>Contact</h2>
-  <p>itachisec@duck.com</p>
+  <p><a href="mailto:you@example.com">you@example.com</a></p>
 </body>
 </html>
 
