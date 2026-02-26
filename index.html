@@ -2,155 +2,682 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>praveenxsharma</title>
-  <meta name="theme-color" content="#1e1e2e" />
-  <meta name="description" content="Web security researcher, Linux enthusiast, AOSP developer. I use Arch btw." />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITACHI — Praveen Sharma</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* === Catppuccin Mocha Palette === */
+    :root {
+      --base:    #1e1e2e;
+      --mantle:  #181825;
+      --crust:   #11111b;
+      --surface0:#313244;
+      --surface1:#45475a;
+      --surface2:#585b70;
+      --overlay0: #6c7086;
+      --overlay1: #7f849c;
+      --overlay2: #9399b2;
+      --subtext0: #a6adc8;
+      --subtext1: #bac2de;
+      --text:    #cdd6f4;
+      --lavender:#b4befe;
+      --blue:    #89b4fa;
+      --sapphire:#74c7ec;
+      --sky:     #89dceb;
+      --teal:    #94e2d5;
+      --green:   #a6e3a1;
+      --yellow:  #f9e2af;
+      --peach:   #fab387;
+      --maroon:  #eba0ac;
+      --red:     #f38ba8;
+      --mauve:   #cba6f7;
+      --pink:    #f5c2e7;
+      --flamingo:#f2cdcd;
+      --rosewater:#f5e0dc;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--base);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === Noise texture overlay === */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.35;
+    }
+
+    /* === Grid lines bg === */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--surface0) 1px, transparent 1px),
+        linear-gradient(90deg, var(--surface0) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* === Scrollbar === */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--mantle); }
+    ::-webkit-scrollbar-thumb { background: var(--mauve); border-radius: 3px; }
+
+    /* === Layout === */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* === NAV === */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      background: rgba(30, 30, 46, 0.8);
+      border-bottom: 1px solid var(--surface0);
+    }
+
+    nav .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--mauve);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span { color: var(--overlay1); }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--subtext0);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--mauve); }
+
+    /* === HERO === */
+    .hero {
+      padding: 100px 0 80px;
+      position: relative;
+    }
+
+    .hero-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--green);
+    }
+
+    .hero h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .hero h1 .accent { color: var(--mauve); }
+    .hero h1 .dim { color: var(--overlay1); }
+
+    .hero-sub {
+      font-size: 0.9rem;
+      color: var(--subtext0);
+      margin: 24px 0 40px;
+      max-width: 540px;
+      line-height: 1.7;
+      border-left: 2px solid var(--mauve);
+      padding-left: 16px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      padding: 5px 12px;
+      border-radius: 2px;
+      border: 1px solid;
+      text-transform: uppercase;
+    }
+
+    .badge-mauve  { border-color: var(--mauve);   color: var(--mauve);   background: rgba(203,166,247,.07); }
+    .badge-blue   { border-color: var(--blue);    color: var(--blue);    background: rgba(137,180,250,.07); }
+    .badge-green  { border-color: var(--green);   color: var(--green);   background: rgba(166,227,161,.07); }
+    .badge-peach  { border-color: var(--peach);   color: var(--peach);   background: rgba(250,179,135,.07); }
+    .badge-teal   { border-color: var(--teal);    color: var(--teal);    background: rgba(148,226,213,.07); }
+
+    /* === CODE BLOCK === */
+    .code-block {
+      background: var(--mantle);
+      border: 1px solid var(--surface0);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 48px 0;
+    }
+
+    .code-header {
+      background: var(--crust);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--surface0);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red    { background: var(--red); }
+    .dot-yellow { background: var(--yellow); }
+    .dot-green  { background: var(--green); }
+
+    .code-filename {
+      margin-left: 8px;
+      font-size: 0.72rem;
+      color: var(--overlay1);
+      letter-spacing: 0.05em;
+    }
+
+    .code-body {
+      padding: 24px;
+      font-size: 0.82rem;
+      line-height: 1.9;
+      overflow-x: auto;
+    }
+
+    .kw  { color: var(--mauve); }
+    .fn  { color: var(--blue); }
+    .st  { color: var(--green); }
+    .cm  { color: var(--overlay1); font-style: italic; }
+    .ty  { color: var(--yellow); }
+    .op  { color: var(--teal); }
+    .var { color: var(--text); }
+    .num { color: var(--peach); }
+
+    /* === SECTION HEADERS === */
+    .section { padding: 64px 0; border-top: 1px solid var(--surface0); }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mauve);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.6rem;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    /* === SKILLS GRID === */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2px;
+    }
+
+    .skill-category { margin-bottom: 32px; }
+
+    .skill-cat-title {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--overlay1);
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--surface0);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tag {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .skill-tag:hover {
+      transform: translateY(-2px);
+    }
+
+    .c1 { background: rgba(203,166,247,.12); color: var(--mauve); border: 1px solid rgba(203,166,247,.25); }
+    .c2 { background: rgba(137,180,250,.12); color: var(--blue);  border: 1px solid rgba(137,180,250,.25); }
+    .c3 { background: rgba(166,227,161,.12); color: var(--green); border: 1px solid rgba(166,227,161,.25); }
+    .c4 { background: rgba(250,179,135,.12); color: var(--peach); border: 1px solid rgba(250,179,135,.25); }
+    .c5 { background: rgba(148,226,213,.12); color: var(--teal);  border: 1px solid rgba(148,226,213,.25); }
+    .c6 { background: rgba(243,139,168,.12); color: var(--red);   border: 1px solid rgba(243,139,168,.25); }
+    .c7 { background: rgba(249,226,175,.12); color: var(--yellow);border: 1px solid rgba(249,226,175,.25); }
+
+    /* === ABOUT GRID === */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .about-card {
+      background: var(--mantle);
+      border: 1px solid var(--surface0);
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .about-card:hover { border-color: var(--mauve); }
+
+    .about-card-icon {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .about-card-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--overlay1);
+      margin-bottom: 8px;
+    }
+
+    .about-card-val {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .about-card-val .hi { color: var(--mauve); }
+
+    /* === TERMINAL BLINK === */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 9px;
+      height: 1.1em;
+      background: var(--mauve);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+
+    /* === INTERESTS === */
+    .interests-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .interest-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--mantle);
+      border: 1px solid var(--surface0);
+      padding: 12px 18px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: var(--subtext1);
+      transition: all 0.2s;
+    }
+
+    .interest-item:hover {
+      border-color: var(--sapphire);
+      color: var(--sapphire);
+      transform: translateY(-2px);
+    }
+
+    .interest-item span { font-size: 1rem; }
+
+    /* === FOOTER === */
+    footer {
+      border-top: 1px solid var(--surface0);
+      padding: 32px 0;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+    }
+
+    footer a { color: var(--mauve); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* === FLOATING ACCENT === */
+    .hero-glow {
+      position: absolute;
+      top: 40px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(203,166,247,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* === ANIMATIONS === */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero > * {
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-tag         { animation-delay: 0.05s; }
+    .hero h1          { animation-delay: 0.12s; }
+    .hero-sub         { animation-delay: 0.2s; }
+    .hero-badges      { animation-delay: 0.28s; }
+    .code-block       { animation-delay: 0.36s; }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 600px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+    }
+
+    /* === INLINE LINK === */
+    .link {
+      color: var(--sapphire);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--sapphire);
+      transition: color 0.2s;
+    }
+    .link:hover { color: var(--sky); border-color: var(--sky); }
+
+    /* Skill categories layout */
+    .skills-cats {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Motto box */
+    .motto-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--crust);
+      border: 1px solid var(--surface1);
+      border-left: 3px solid var(--green);
+      padding: 10px 18px;
+      font-size: 0.78rem;
+      color: var(--green);
+      letter-spacing: 0.05em;
+      margin-top: 16px;
+    }
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to main content</a>
 
-  <header class="shell">
-    <nav class="nav" aria-label="Primary">
-      <a class="brand" href="">praveenxsharma</a>
-      <ul class="menu">
-        <li><a aria-current="page" href="">home</a></li>
-        <li><a href="about/">about</a></li>
-        <li><a href="blog/">blog</a></li>
-        <li><a href="https://github.com/praveenxsharma" target="_blank" rel="noopener">github&#8599;</a></li>
-      </ul>
-    </nav>
-  </header>
+<!-- NAV -->
+<nav>
+  <div class="wrapper">
+    <a class="nav-logo" href="#">ITACHI<span>~$</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#setup">setup</a></li>
+      <li><a href="blog.html">blog</a></li>
+      <li><a href="https://github.com/praveenxsharma" target="_blank">github ↗</a></li>
+    </ul>
+  </div>
+</nav>
 
-  <main id="main" class="shell">
+<!-- HERO -->
+<div class="wrapper">
+  <section class="hero">
+    <div class="hero-glow"></div>
 
-    <section class="intro">
-      <div class="intro-text">
-        <h1>ITACHI.</h1>
-        <p class="intro-sub">
-          <span class="acc">~/</span>praveen sharma &mdash; web sec &amp; aosp dev
-        </p>
-        <p class="intro-sub" style="margin-top:.3rem; font-size:.82rem; color:var(--overlay1)">
-          I use Arch btw &#x1F427;
-        </p>
-      </div>
-      <div class="intro-avatar" aria-hidden="true">
-        <!-- drop your avatar image here -->
-        <img src="assets/images/avatar.jpg" alt="" loading="lazy" decoding="async" />
-      </div>
-    </section>
+    <p class="hero-tag">web security researcher & aosp developer</p>
 
-    <section class="section">
-      <h2>about</h2>
-      <p>
-        web security researcher, linux enthusiast, and aosp developer based in India &#x1F1EE;&#x1F1F3;.
-        i find holes in things, build stuff for fun, and spend way too much time configuring my window manager.
-        can&#39;t decide what to do, so i do everything.
-      </p>
-    </section>
+    <h1>
+      <span class="dim">~/</span><span class="accent">Praveen</span><br>
+      Sharma<span class="cursor"></span>
+    </h1>
 
-    <section class="section">
-      <h2>skills</h2>
-      <ul class="rows">
-        <li class="row">
-          <div class="row-left">
-            <div class="dot" aria-hidden="true">&#9702;</div>
-            <div>
-              <div class="row-title">security &amp; pentesting</div>
-              <div class="row-sub">Burp Suite, Metasploit, Wireshark, Kali Linux, BlackArch, Parrot OS</div>
-            </div>
-          </div>
-        </li>
-        <li class="row">
-          <div class="row-left">
-            <div class="dot" aria-hidden="true">&#9702;</div>
-            <div>
-              <div class="row-title">languages</div>
-              <div class="row-sub">C, C++, Python, JavaScript, Go, Java, Bash</div>
-            </div>
-          </div>
-        </li>
-        <li class="row">
-          <div class="row-left">
-            <div class="dot" aria-hidden="true">&#9702;</div>
-            <div>
-              <div class="row-title">linux &amp; aosp</div>
-              <div class="row-sub">Arch Linux &bull; Hyprland &bull; AOSP device trees &bull; Android internals &bull; MistOs</div>
-            </div>
-          </div>
-        </li>
-        <li class="row">
-          <div class="row-left">
-            <div class="dot" aria-hidden="true">&#9702;</div>
-            <div>
-              <div class="row-title">web &amp; devops</div>
-              <div class="row-sub">HTML, CSS, JavaScript, MongoDB, Git, Docker</div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </section>
-
-    <section class="section">
-      <h2>recent posts</h2>
-      <div class="blog-cards">
-
-        <!-- ============================================================
-             ADD NEW BLOG CARD HERE when you publish a new post.
-             Copy one <a class="blog-card"> block and update:
-               href         → path to your post folder (e.g. blog/my-post/)
-               card-title   → post title
-               date         → date string
-               card-tags    → comma-separated tags
-               card-desc    → one-line summary
-               card-footer  → word count / read time
-             ============================================================ -->
-
-        <a href="blog/hello-world/" class="blog-card">
-          <div class="card-body">
-            <h3 class="card-title">Hello World</h3>
-            <div class="card-meta">
-              <span>
-                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                2026-02-26
-              </span>
-              <span>
-                <svg viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-                misc
-              </span>
-            </div>
-            <p class="card-desc">First post. Setting up the blog and figuring out what to write about.</p>
-          </div>
-          <div class="card-arrow">&#8250;</div>
-        </a>
-
-      </div>
-    </section>
-
-    <section class="socials" aria-label="social links">
-      <a class="icon" href="https://github.com/praveenxsharma" target="_blank" rel="noopener" aria-label="GitHub">
-        <i class="fa-brands fa-github"></i>
-      </a>
-      <a class="icon" href="https://x.com/praveenxsharma" target="_blank" rel="noopener" aria-label="Twitter / X">
-        <i class="fa-brands fa-x-twitter"></i>
-      </a>
-      <!-- add more icons here -->
-    </section>
-
-  </main>
-
-  <footer class="shell footer">
-    <p>
-      &#169; 2025 &bull;
-      <a href="https://github.com/praveenxsharma" target="_blank" rel="noopener">praveenxsharma</a>
-      &bull; powered by <a href="https://www.catppuccin.com/" target="_blank" rel="noopener">catppuccin</a>
+    <p class="hero-sub">
+      I break things, build things, and live in the terminal.
+      Alias <strong style="color:var(--mauve)">ITACHI</strong> — based in India 🇮🇳.
+      I can't decide what to do, so I do everything.
     </p>
-  </footer>
 
-  <script src="assets/js/site.js"></script>
+    <div class="hero-badges">
+      <span class="badge badge-mauve">Web Security</span>
+      <span class="badge badge-blue">Linux</span>
+      <span class="badge badge-green">AOSP Dev</span>
+      <span class="badge badge-peach">C / C++</span>
+      <span class="badge badge-teal">Python</span>
+    </div>
+
+    <div class="motto-box">
+      🐧 I use Arch btw
+    </div>
+  </section>
+
+  <!-- CODE BLOCK -->
+  <div class="code-block">
+    <div class="code-header">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <span class="code-filename">about_me.rs</span>
+    </div>
+    <pre class="code-body"><code><span class="cm">// Who am I?</span>
+<span class="kw">struct</span> <span class="ty">Developer</span> {
+    name:     <span class="ty">&str</span>,
+    alias:    <span class="ty">&str</span>,
+    location: <span class="ty">&str</span>,
+    languages: <span class="ty">Vec</span><span class="op">&lt;&str&gt;</span>,
+    interests: <span class="ty">Vec</span><span class="op">&lt;&str&gt;</span>,
+}
+
+<span class="kw">fn</span> <span class="fn">main</span>() {
+    <span class="kw">let</span> <span class="var">me</span> <span class="op">=</span> <span class="ty">Developer</span> {
+        name:      <span class="st">"Praveen Sharma"</span>,
+        alias:     <span class="st">"ITACHI"</span>,
+        location:  <span class="st">"India 🇮🇳"</span>,
+        languages: <span class="fn">vec!</span>[<span class="st">"C"</span>, <span class="st">"C++"</span>, <span class="st">"Python"</span>, <span class="st">"JavaScript"</span>, <span class="st">"Go"</span>],
+        interests: <span class="fn">vec!</span>[<span class="st">"Linux"</span>, <span class="st">"Android"</span>, <span class="st">"Web Security"</span>],
+    };
+
+    <span class="fn">println!</span>(<span class="st">"Can't decide what to do, so I do everything!"</span>);
+}</code></pre>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <p class="section-label">// 01</p>
+    <h2 class="section-title">About</h2>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="about-card-icon">🔐</div>
+        <div class="about-card-title">Security</div>
+        <div class="about-card-val">Web security researcher with experience in <span class="hi">Burp Suite</span>, <span class="hi">Metasploit</span>, and <span class="hi">Wireshark</span>. I find the holes before the bad guys do.</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🤖</div>
+        <div class="about-card-title">Android / AOSP</div>
+        <div class="about-card-val">Building and modding Android from source. Custom ROMs, kernel tinkering, and making MistOS a reality.</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🐧</div>
+        <div class="about-card-title">Linux Enthusiast</div>
+        <div class="about-card-val">Daily driving <span class="hi">Arch Linux</span> with <span class="hi">Hyprland</span>. The dotfiles are always being tweaked. Always.</div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">⚙️</div>
+        <div class="about-card-title">Builder</div>
+        <div class="about-card-val">Full-stack enough to ship things. C for the low-level, Python for the scripts, JS for the web, Go for the tools.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <p class="section-label">// 02</p>
+    <h2 class="section-title">Skills & Tools</h2>
+
+    <div class="skills-cats">
+
+      <div class="skill-category">
+        <div class="skill-cat-title">Security & Pentesting</div>
+        <div class="skill-tags">
+          <span class="skill-tag c1">Burp Suite</span>
+          <span class="skill-tag c1">Metasploit</span>
+          <span class="skill-tag c1">Wireshark</span>
+          <span class="skill-tag c1">BlackArch</span>
+          <span class="skill-tag c1">Kali Linux</span>
+          <span class="skill-tag c1">Parrot OS</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <div class="skill-cat-title">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag c2">C</span>
+          <span class="skill-tag c2">C++</span>
+          <span class="skill-tag c2">Python</span>
+          <span class="skill-tag c2">JavaScript</span>
+          <span class="skill-tag c2">Go</span>
+          <span class="skill-tag c2">Java</span>
+          <span class="skill-tag c2">Bash</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <div class="skill-cat-title">Web & Frontend</div>
+        <div class="skill-tags">
+          <span class="skill-tag c3">HTML5</span>
+          <span class="skill-tag c3">CSS3</span>
+          <span class="skill-tag c3">JavaScript</span>
+          <span class="skill-tag c3">MongoDB</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <div class="skill-cat-title">OS & Environment</div>
+        <div class="skill-tags">
+          <span class="skill-tag c4">Arch Linux</span>
+          <span class="skill-tag c4">Debian</span>
+          <span class="skill-tag c4">Ubuntu</span>
+          <span class="skill-tag c4">Hyprland</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <div class="skill-cat-title">DevOps & Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag c5">Git</span>
+          <span class="skill-tag c5">Docker</span>
+          <span class="skill-tag c5">VS Code</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section class="section" id="setup">
+    <p class="section-label">// 03</p>
+    <h2 class="section-title">Current Setup</h2>
+
+    <div class="interests-row">
+      <div class="interest-item"><span>💻</span> Arch Linux</div>
+      <div class="interest-item"><span>🪟</span> Hyprland WM</div>
+      <div class="interest-item"><span>👻</span> MistOs</div>
+      <div class="interest-item"><span>⌨️</span> JetBrains Mono</div>
+      <div class="interest-item"><span>🎨</span> Catppuccin Mocha</div>
+      <div class="interest-item"><span>🐈‍⬛</span> btw I use Arch</div>
+    </div>
+  </section>
+
+  <!-- INTERESTS -->
+  <section class="section">
+    <p class="section-label">// 04</p>
+    <h2 class="section-title">Interests</h2>
+
+    <div class="interests-row">
+      <div class="interest-item"><span>🔍</span> Web Security</div>
+      <div class="interest-item"><span>🤖</span> Android / AOSP</div>
+      <div class="interest-item"><span>🐧</span> Linux ricing</div>
+      <div class="interest-item"><span>🔧</span> Low-level C/C++</div>
+      <div class="interest-item"><span>🌐</span> Network Security</div>
+      <div class="interest-item"><span>🛠️</span> Tool Building</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrapper">
+    <p>crafted with 🖤 by <a href="https://github.com/praveenxsharma" target="_blank">@praveenxsharma</a> &nbsp;·&nbsp; catppuccin mocha &nbsp;·&nbsp; 2025</p>
+  </div>
+</footer>
+
 </body>
 </html>
