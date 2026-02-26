@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>blog &mdash; ITACHI</title>
+  <meta name="theme-color" content="#1e1e2e" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/blog.css" />
+</head>
+<body>
+
+<nav>
+  <div class="wrapper">
+    <a class="nav-logo" href="../">ITACHI<span>~$</span></a>
+    <ul class="nav-links">
+      <li><a href="../">home</a></li>
+      <li><a href="../" class="active">blog</a></li>
+      <li><a href="https://github.com/praveenxsharma" target="_blank" rel="noopener">github &#8599;</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrapper">
+  <div class="blog-page-header">
+    <p class="blog-hero-tag">writing</p>
+    <h1 class="blog-page-title"><span class="acc">~/</span>blog</h1>
+    <p class="blog-page-sub">
+      Notes, writeups, and thoughts on security, Linux, and whatever I&rsquo;m breaking this week.
+    </p>
+  </div>
+
+  <div class="blog-cards">
+
+    <!-- ================================================================
+         HOW TO ADD A NEW POST
+
+         1. Create folder:   blog/your-post-slug/
+         2. Copy             blog/_template/index.html  into it
+         3. Fill in content
+         4. Add a new <a class="blog-card"> block HERE at the TOP of this list
+
+         Fields to update per card:
+           href              →  your-post-slug/
+           blog-card-date    →  YYYY-MM-DD
+           tag-pill class    →  tag-security / tag-linux / tag-android /
+                                tag-ctf / tag-writeup / tag-tools / tag-misc
+           blog-card-title   →  post title
+           blog-card-desc    →  one-sentence summary
+           blog-card-footer  →  "X,XXX words &middot; Y min read"
+         ================================================================ -->
+
+    <a href="hello-world/" class="blog-card">
+      <div class="blog-card-meta">
+        <span class="blog-card-date">2026-02-26</span>
+        <span class="tag-pill tag-misc">misc</span>
+      </div>
+      <div class="blog-card-title">Hello World</div>
+      <div class="blog-card-desc">First post. Setting up the blog and figuring out what to write about.</div>
+      <div class="blog-card-footer">~200 words &middot; 1 min read</div>
+      <div class="blog-card-arrow">read more &rarr;</div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <div class="wrapper">
+    <p>crafted with &#x1F5A4; by <a href="https://github.com/praveenxsharma" target="_blank" rel="noopener">@praveenxsharma</a> &nbsp;&middot;&nbsp; catppuccin mocha &nbsp;&middot;&nbsp; 2025</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+</body>
+</html>
