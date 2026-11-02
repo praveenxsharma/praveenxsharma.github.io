@@ -35,20 +35,23 @@
     <!-- ================================================================
          HOW TO ADD A NEW POST
 
-         1. Create folder:   blog/your-post-slug/
-         2. Copy             blog/_template/index.html  into it
-         3. Fill in content
-         4. Add a new <a class="blog-card"> block HERE at the TOP of this list
+         Write content/posts/your-slug.md, then run:
 
-         Fields to update per card:
-           href              →  your-post-slug/
-           blog-card-date    →  YYYY-MM-DD
-           tag-pill class    →  tag-security / tag-linux / tag-android /
-                                tag-ctf / tag-writeup / tag-tools / tag-misc
-           blog-card-title   →  post title
-           blog-card-desc    →  one-sentence summary
-           blog-card-footer  →  "X,XXX words &middot; Y min read"
+             python3 scripts/build.py
+
+         That renders blog/your-slug/index.html and rewrites the card list
+         below (everything between the POSTS markers is generated — edit
+         the .md, never this file).
+
+         Frontmatter fields:
+           title    post title                        (required)
+           date     YYYY-MM-DD                        (required, sorts the list)
+           summary  one-sentence card description     (required)
+           tags     [security, linux, android, ctf, writeup, tools, misc]
+           draft    true to keep a post out of the build
          ================================================================ -->
+
+    <!-- POSTS:START -->
 
     <a href="hello-world/" class="blog-card">
       <div class="blog-card-meta">
@@ -57,20 +60,11 @@
       </div>
       <div class="blog-card-title">Hello World</div>
       <div class="blog-card-desc">First post. Setting up the blog and figuring out what to write about.</div>
-      <div class="blog-card-footer">~200 words &middot; 1 min read</div>
+      <div class="blog-card-footer">~176 words &middot; 1 min read</div>
       <div class="blog-card-arrow">read more &rarr;</div>
     </a>
 
-        <a href="AOSP-And-Community/" class="blog-card">
-      <div class="blog-card-meta">
-        <span class="blog-card-date">2026-05-27</span>
-        <span class="tag-pill tag-misc">AOSP</span>
-      </div>
-      <div class="blog-card-title">AOSP and Community</div>
-      <div class="blog-card-desc">What i learned in the last few months about AOSP community</div>
-      <div class="blog-card-footer">~300 words &middot; 1-2 min read</div>
-      <div class="blog-card-arrow">read more &rarr;</div>
-    </a>
+    <!-- POSTS:END -->
 
   </div>
 </div>

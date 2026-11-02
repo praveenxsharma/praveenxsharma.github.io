@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hello World &mdash; ITACHI</title>
+  <meta name="description" content="First post. Setting up the blog and figuring out what to write about." />
   <meta name="theme-color" content="#1e1e2e" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Hello World" />
+  <meta property="og:description" content="First post. Setting up the blog and figuring out what to write about." />
   <link rel="stylesheet" href="../../assets/css/style.css" />
   <link rel="stylesheet" href="../../assets/css/blog.css" />
   <link rel="stylesheet" href="https://unpkg.com/@catppuccin/highlightjs@1.0.1/css/catppuccin-mocha.css" />
@@ -13,7 +17,7 @@
 
 <nav>
   <div class="wrapper">
-    <a class="nav-logo" href="../../">ITACHI<span>~$</span></a>
+    <a class="nav-logo" href="../../">itachi<span>~$</span></a>
     <ul class="nav-links">
       <li><a href="../../">home</a></li>
       <li><a href="../../blog/" class="active">blog</a></li>
@@ -24,8 +28,10 @@
 
 <div class="blog-layout">
   <article>
+
     <header>
       <h1>Hello World</h1>
+
       <div class="post-meta">
         <span class="meta-item">
           <svg class="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -42,7 +48,7 @@
             <path d="M12 20h9"/>
             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
           </svg>
-          ~200 words
+          176 words
         </span>
         <span class="meta-sep">&middot;</span>
         <span class="meta-item">
@@ -53,50 +59,35 @@
           1 min read
         </span>
       </div>
+
       <div class="post-tags">
         <span class="tag-pill tag-misc">misc</span>
       </div>
     </header>
 
-    <p>
-      first post. not entirely sure what i&rsquo;m going to write about yet, but that&rsquo;s kind of the point.
-      this is my space to dump thoughts, writeups, and notes &mdash; mostly around security, linux,
-      and whatever i&rsquo;m poking at on a given week.
-    </p>
-
-    <hr>
-
-    <h1>Why</h1>
-
-    <p>
-      i&rsquo;ve been meaning to do this for a while. there&rsquo;s a lot of things i figure out by breaking stuff
-      or just spending too many hours in a terminal, and most of it lives in my head or scattered across notes.
-      writing it down forces me to actually understand it properly.
-    </p>
-
-    <p>expect writeups, ctf notes, linux things, maybe some aosp stuff. no promises on frequency.</p>
-
-    <h1>How This Works</h1>
-
-    <p>
-      plain HTML and CSS. no frameworks, no build step. runs on GitHub Pages.
-      to add a post: copy <code>blog/_template/index.html</code> into a new folder,
-      fill in content, add a card to <code>blog/index.html</code>. that&rsquo;s it.
-    </p>
-
-    <pre data-filename="structure"><code class="language-plaintext">praveenxsharma.github.io/
-  index.html
-  blog/
-    index.html            &lt;-- add a card here for each new post
-    _template/            &lt;-- copy this for each new post
-    hello-world/
-    your-next-post/
-  assets/
-    css/   js/</code></pre>
+<p>first post. not entirely sure what i'm going to write about yet, but that's kind of the point.
+this is my space to dump thoughts, writeups, and notes — mostly around security, linux,
+and whatever i'm poking at on a given week.</p>
+<hr />
+<h1 id="why">Why</h1>
+<p>i've been meaning to do this for a while. there's a lot of things i figure out by breaking stuff
+or just spending too many hours in a terminal, and most of it lives in my head or scattered across notes.
+writing it down forces me to actually understand it properly.</p>
+<p>expect writeups, ctf notes, linux things, maybe some aosp stuff. no promises on frequency.</p>
+<h1 id="how-this-works">How This Works</h1>
+<p>plain HTML and CSS. no frameworks, no client-side routing. everything is generated from markdown
+by a small python script and served by GitHub Pages.</p>
+<p>to add a post: create <code>content/posts/your-slug.md</code>, fill in the frontmatter, write the body,
+then run <code>python3 scripts/build.py</code>. the page and the card on the blog index are generated for you.</p>
+<pre><code class="language-plaintext">content/posts/*.md          &lt;-- you write here
+scripts/build.py            &lt;-- renders the html
+blog/&lt;slug&gt;/index.html      &lt;-- generated, do not edit
+</code></pre>
 
     <hr>
 
     <p><a href="../../blog/">&larr; back to all posts</a></p>
+
   </article>
 
   <aside class="toc" aria-label="Table of Contents"></aside>
@@ -104,7 +95,7 @@
 
 <footer>
   <div class="wrapper">
-    <p>crafted with &#x1F5A4; by <a href="https://github.com/praveenxsharma" target="_blank" rel="noopener">@praveenxsharma</a> &nbsp;&middot;&nbsp; catppuccin mocha &nbsp;&middot;&nbsp; 2025</p>
+    <p>crafted with &#x1F5A4; by <a href="https://github.com/praveenxsharma" target="_blank" rel="noopener">@praveenxsharma</a> &nbsp;&middot;&nbsp; catppuccin mocha &nbsp;&middot;&nbsp; 2026</p>
   </div>
 </footer>
 
