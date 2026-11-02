@@ -288,7 +288,7 @@ def build() -> int:
     posts = [parse(p) for p in sorted(SRC.glob("*.md"))]
     posts = [p for p in posts if not p.get("draft")]
     posts.sort(key=lambda p: p["date"], reverse=True)
-    year = max(p["date"].year for p in posts) if posts else 0
+    year = max(p["date"].year for p in posts) if posts else date.today().year
     slugs = {p["slug"]: p["slug"] for p in posts}
 
     for meta in posts:
