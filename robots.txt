@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://praveenxsharma.github.io/sitemap.xml

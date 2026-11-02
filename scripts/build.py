@@ -11,6 +11,7 @@ mtime, summary to the first paragraph. Obsidian syntax ([[wikilinks]],
 from __future__ import annotations
 
 import html
+import json
 import re
 import sys
 from datetime import date, datetime
@@ -26,6 +27,11 @@ BLOG = ROOT / "blog"
 INDEX = BLOG / "index.html"
 START, END = "<!-- POSTS:START -->", "<!-- POSTS:END -->"
 
+SITE = "https://praveenxsharma.github.io"
+OG_IMAGE = SITE + "/assets/og.png"
+AUTHOR = "Praveen Sharma"
+SAME_AS = ["https://github.com/praveenxsharma", "https://x.com/praveenxsharma"]
+
 TAG_CLASS = {
     "security": "tag-security", "linux": "tag-linux", "android": "tag-android",
     "aosp": "tag-android", "ctf": "tag-ctf", "writeup": "tag-writeup",
@@ -39,10 +45,26 @@ PAGE = Template("""<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title} &mdash; itachi</title>
   <meta name="description" content="${summary}" />
+  <link rel="canonical" href="${url}" />
+  <meta name="author" content="${author}" />
   <meta name="theme-color" content="#1e1e2e" />
   <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="itachi" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${summary}" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:image" content="${og_image}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="itachi — sakura shell" />
+  <meta property="article:published_time" content="${iso_date}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@praveenxsharma" />
+  <meta name="twitter:creator" content="@praveenxsharma" />
+  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:description" content="${summary}" />
+  <meta name="twitter:image" content="${og_image}" />
+  <script type="application/ld+json">${jsonld}</script>
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="apple-touch-icon" href="../../assets/favicon-180.png" />
@@ -78,7 +100,7 @@ PAGE = Template("""<!DOCTYPE html>
             <line x1="8" y1="2" x2="8" y2="6"/>
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
-          ${date}
+          <time datetime="${iso_date}">${date}</time>
         </span>
         <span class="meta-sep">&middot;</span>
         <span class="meta-item">
@@ -253,10 +275,30 @@ def words_of(meta: dict) -> int:
 def post(meta: dict, year: int, slugs: dict[str, str]) -> str:
     words = words_of(meta)
     tags = meta.get("tags") or ["misc"]
+    url = f"{SITE}/blog/{meta['slug']}/"
+    jsonld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": meta["title"],
+        "description": meta["summary"],
+        "datePublished": meta["date"].isoformat(),
+        "dateModified": meta["date"].isoformat(),
+        "url": url,
+        "mainEntityOfPage": {"@type": "WebPage", "@id": url},
+        "image": OG_IMAGE,
+        "keywords": ", ".join(tags),
+        "author": {"@type": "Person", "name": AUTHOR, "url": SITE + "/", "sameAs": SAME_AS},
+        "publisher": {"@type": "Person", "name": AUTHOR, "url": SITE + "/"},
+    }, ensure_ascii=False)
     return PAGE.substitute(
         slug=meta["slug"],
         title=html.escape(meta["title"]),
         summary=html.escape(meta["summary"]),
+        url=url,
+        iso_date=meta["date"].isoformat(),
+        og_image=OG_IMAGE,
+        author=AUTHOR,
+        jsonld=jsonld,
         date=meta["date"].strftime("%d/%m/%y"),
         words=f"{words:,}",
         read=max(1, round(words / 200)),
@@ -325,6 +367,20 @@ def build() -> int:
     cards = "\n\n".join(card(p) for p in posts)
     INDEX.write_text(f"{head}{START}\n\n{cards}\n\n    {END}{tail}", encoding="utf-8")
     print(f"  blog/index.html ({len(posts)} cards)")
+
+    lastmod = posts[0]["date"].isoformat() if posts else date.today().isoformat()
+    urls = [(SITE + "/", lastmod), (SITE + "/blog/", lastmod)]
+    urls += [(f"{SITE}/blog/{p['slug']}/", p["date"].isoformat()) for p in posts]
+    entries = "\n".join(
+        f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{d}</lastmod>\n  </url>" for u, d in urls
+    )
+    (ROOT / "sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{entries}\n</urlset>\n",
+        encoding="utf-8",
+    )
+    print(f"  sitemap.xml ({len(urls)} urls)")
     return 0
 
 
@@ -342,6 +398,10 @@ def check() -> int:
     assert 'href="../../blog/"' in out, "asset/back-link paths broken"
     assert "02/01/26" in out, "date format broken"
     assert card(meta).count('href="s/"') == 1, "card slug broken"
+    assert 'rel="canonical" href="https://praveenxsharma.github.io/blog/s/"' in out, "canonical missing"
+    assert '"@type": "BlogPosting"' in out, "json-ld missing"
+    assert "<time datetime=\"2026-01-02\">" in out, "time element missing"
+    assert 'property="og:image"' in out, "og image missing"
 
     # Obsidian syntax conversion
     assert obsidian_to_md("![[shot.png]]", slugs) == "![shot.png](shot.png)", "embed broken"
