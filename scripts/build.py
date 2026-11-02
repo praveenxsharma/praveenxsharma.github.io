@@ -30,7 +30,7 @@ START, END = "<!-- POSTS:START -->", "<!-- POSTS:END -->"
 SITE = "https://praveenxsharma.github.io"
 OG_IMAGE = SITE + "/assets/og.png"
 AUTHOR = "Praveen Sharma"
-SAME_AS = ["https://github.com/praveenxsharma", "https://x.com/praveenxsharma"]
+SAME_AS = ["https://github.com/praveenxsharma", "https://x.com/P24v33n"]
 
 TAG_CLASS = {
     "security": "tag-security", "linux": "tag-linux", "android": "tag-android",
@@ -59,8 +59,8 @@ PAGE = Template("""<!DOCTYPE html>
   <meta property="og:image:alt" content="itachi — sakura shell" />
   <meta property="article:published_time" content="${iso_date}" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@praveenxsharma" />
-  <meta name="twitter:creator" content="@praveenxsharma" />
+  <meta name="twitter:site" content="@P24v33n" />
+  <meta name="twitter:creator" content="@P24v33n" />
   <meta name="twitter:title" content="${title}" />
   <meta name="twitter:description" content="${summary}" />
   <meta name="twitter:image" content="${og_image}" />
