@@ -2,7 +2,7 @@
 title: Yo !
 date: 2026-11-02
 tags: "[goof]"
-summary:
+summary: the first one
 ---
 So , writing my first blog here after doing many fixes with formatting and rendering .
 if you are reading this then it rendered fine , 
