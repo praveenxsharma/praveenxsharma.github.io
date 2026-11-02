@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 182 182"
+     role="img" aria-labelledby="title desc">
+  <title id="title">Sakura Shell</title>
+  <desc id="desc">A lavender terminal framed by two five-petal sakura blossoms.</desc>
+
+  <style>
+    :root {
+      --lavender: #cba6f7;
+      --pink: #f5c2e7;
+      --stamen: #30263f;
+    }
+    .terminal {
+      fill: none;
+      stroke: var(--lavender);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .petal { fill: var(--pink); }
+    .stamen {
+      fill: none;
+      stroke: var(--stamen);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+    }
+  </style>
+
+  <!-- Terminal window -->
+  <rect class="terminal" x="62" y="54" width="84" height="68" rx="8"/>
+  <path class="terminal" d="M83 81 L99 92 L83 103" stroke-width="5"/>
+  <path class="terminal" d="M105 104 H126" stroke-width="5"/>
+
+  <defs>
+    <!-- One broad sakura petal: tapered at the centre, softly lobed/notched at its tip. -->
+    <path id="sakura-petal"
+      d="M0 -3
+         C-4 -6 -12 -12.5 -12 -19
+         C-12 -24.5 -7.2 -28 -2.4 -25.8
+         C3.2 -23.2 9.5 -15.6 10 -9.5
+         C10.4 -5.2 4.5 -3 0 -3 Z"/>
+  </defs>
+
+  <!-- Upper blossom: five separate petals and a tiny pale centre. -->
+  <g transform="translate(76 36)">
+    <use xlink:href="#sakura-petal" class="petal"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(72) scale(.97)"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(144) scale(.94)"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(216) scale(.98)"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(288) scale(.95)"/>
+    <path class="stamen" d="M0 0 L-1.5 -8 M0 0 L7 -4 M0 0 L7 5 M0 0 L-5 7 M0 0 L-8 -2"/>
+    <circle cx="0" cy="0" r="2.2" fill="#f5e0dc"/>
+  </g>
+
+  <!-- Lower-left blossom, slightly smaller like the reference. -->
+  <g transform="translate(44 83) scale(.88)">
+    <use xlink:href="#sakura-petal" class="petal"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(72) scale(.97)"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(144) scale(.94)"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(216) scale(.98)"/>
+    <use xlink:href="#sakura-petal" class="petal" transform="rotate(288) scale(.95)"/>
+    <path class="stamen" d="M0 0 L-1.5 -8 M0 0 L7 -4 M0 0 L7 5 M0 0 L-5 7 M0 0 L-8 -2"/>
+    <circle cx="0" cy="0" r="2.2" fill="#cba6f7"/>
+  </g>
+
+  <!-- Small detached leaf beneath the lower blossom. -->
+  <path d="M43 96 C37 104 33 115 34 124
+           C39 119 43 112 46 105
+           L42 116 C49 109 51 101 43 96Z"
+        fill="var(--lavender)"/>
+</svg>
