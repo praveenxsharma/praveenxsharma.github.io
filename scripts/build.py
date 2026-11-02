@@ -167,8 +167,8 @@ def norm_tags(value) -> list[str]:
         return ["misc"]
     if isinstance(value, str):
         value = re.split(r"[,\s]+", value)
-    tags = [str(t).strip().lstrip("#").lower() for t in value if str(t).strip()]
-    return tags or ["misc"]
+    tags = [str(t).strip(' []"\'#').lower() for t in value]
+    return [t for t in tags if t] or ["misc"]
 
 
 def git_date(path: Path) -> date | None:
@@ -353,7 +353,9 @@ def check() -> int:
     assert to_date("2026-05-27", date(2000, 1, 1)) == date(2026, 5, 27)
     assert to_date("garbage", date(2000, 1, 1)) == date(2000, 1, 1)
     assert norm_tags("security, #linux") == ["security", "linux"]
-    assert norm_tags(None) == ["misc"]
+    assert norm_tags('"[misc]"') == ["misc"], "quoted bracket tag leaks"
+    assert norm_tags("[misc]") == ["misc"]
+    assert norm_tags("") == ["misc"]
     print("self-check ok")
     return 0
 
