@@ -22,7 +22,7 @@ so who's gonna pay for those multiple parallel subagents ?
 
 the graph shows significant growth in benchmarks but do they really matter that much if the cost is growing same time exponentially for a task which you can do manually with some time and i don't mean that you doing those changes will give same growth as google's method but it won't be that bad too .
 
-![[Pasted image 20261109123553.png]]
+![[Pasted image 20261109123553.png|Benchmark scores: harness scaling gains +7.4 on Code, +8.4 on Web, +9.4 on Office over the base harness]]
 
 overall a great research and great learning from this one to modify harness for our side .
 

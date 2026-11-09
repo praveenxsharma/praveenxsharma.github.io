@@ -242,7 +242,13 @@ def obsidian_to_md(text: str, slugs: dict[str, str]) -> str:
     """Convert Obsidian-only syntax to standard markdown."""
     text = re.sub(r"%%.*?%%", "", text, flags=re.S)
     text = re.sub(r"==(.+?)==", r"<mark>\1</mark>", text)
-    text = re.sub(r"!\[\[([^\]|]+)(?:\|[^\]]*)?\]\]", lambda m: f"![{m.group(1)}]({m.group(1).strip()})", text)
+    def embed(m):
+        name = m.group(1).strip()
+        alias = (m.group(2) or "").strip()
+        alt = alias if alias and not alias.isdigit() else name  # numeric alias = size
+        return f"![{alt}]({name})"
+
+    text = re.sub(r"!\[\[([^\]|]+)(?:\|([^\]]*))?\]\]", embed, text)
 
     def link(m):
         target, label = m.group(1).strip(), m.group(2)
@@ -253,7 +259,34 @@ def obsidian_to_md(text: str, slugs: dict[str, str]) -> str:
     return re.sub(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", link, text)
 
 
-def render(meta: dict, slugs: dict[str, str]) -> str:
+def resolve_images(text: str, outdir: Path, post_name: str, warnings: list[str]) -> str:
+    """Copy every local <img> next to the page and point the tag at the copy.
+
+    Looks in content/posts/ first, then anywhere under content/, so an Obsidian
+    attachments folder works. Missing files are reported instead of silently
+    shipping a broken image.
+    """
+    import shutil
+    from urllib.parse import quote, unquote
+
+    def repl(m):
+        src = html.unescape(m.group(2))
+        if re.match(r"^(https?:|data:|//)", src):
+            return m.group(0)
+        name = Path(unquote(src)).name
+        found = SRC / name
+        if not found.is_file():
+            found = next((c for c in (ROOT / "content").rglob(name) if c.is_file()), None)
+        if found is None:
+            warnings.append(f"{post_name}: missing image '{name}' — copy it into content/posts/")
+            return m.group(0)
+        shutil.copy2(found, outdir / name)
+        return f"{m.group(1)}{quote(name)}{m.group(3)}"
+
+    return re.sub(r'(<img\b[^>]*?\bsrc=")([^"]+)(")', repl, text)
+
+
+def render(meta: dict, slugs: dict[str, str], outdir: Path, warnings: list[str]) -> str:
     text = markdown.markdown(
         obsidian_to_md(meta["body"], slugs),
         extensions=["fenced_code", "tables", "attr_list", "toc", "sane_lists"],
@@ -264,7 +297,7 @@ def render(meta: dict, slugs: dict[str, str]) -> str:
         r'<pre data-filename="\2"><code class="language-\1">',
         text,
     )
-    return text
+    return resolve_images(text, outdir, meta["slug"], warnings)
 
 
 def words_of(meta: dict) -> int:
@@ -272,7 +305,7 @@ def words_of(meta: dict) -> int:
     return len(re.findall(r"\w+", plain))
 
 
-def post(meta: dict, year: int, slugs: dict[str, str]) -> str:
+def post(meta: dict, year: int, slugs: dict[str, str], outdir: Path, warnings: list[str]) -> str:
     words = words_of(meta)
     tags = meta.get("tags") or ["misc"]
     url = f"{SITE}/blog/{meta['slug']}/"
@@ -306,7 +339,7 @@ def post(meta: dict, year: int, slugs: dict[str, str]) -> str:
             f'        <span class="tag-pill {TAG_CLASS.get(t, "tag-misc")}">{html.escape(t)}</span>'
             for t in tags
         ),
-        body=render(meta, slugs),
+        body=render(meta, slugs, outdir, warnings),
         year=year,
     )
 
@@ -336,20 +369,13 @@ def build() -> int:
     year = max(p["date"].year for p in posts) if posts else date.today().year
     slugs = {p["slug"]: p["slug"] for p in posts}
 
+    warnings: list[str] = []
+
     for meta in posts:
         out = BLOG / meta["slug"] / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(post(meta, year, slugs), encoding="utf-8")
+        out.write_text(post(meta, year, slugs, out.parent, warnings), encoding="utf-8")
         print(f"  blog/{meta['slug']}/index.html")
-
-        # Keep local images next to the .md working: copy what the post references.
-        for name in set(re.findall(r"!\[[^\]]*\]\(([^)\s]+)", meta["body"])) | set(
-            re.findall(r"!\[\[([^\]|]+)", meta["body"])
-        ):
-            src = SRC / name
-            if src.is_file():
-                shutil.copy2(src, out.parent / name)
-                print(f"    + {name}")
 
     # Drop pages left behind when a post is renamed or deleted.
     for stale in BLOG.iterdir():
@@ -381,6 +407,11 @@ def build() -> int:
         encoding="utf-8",
     )
     print(f"  sitemap.xml ({len(urls)} urls)")
+
+    for w in warnings:
+        print(f"  ! {w}")
+    if warnings:
+        print(f"  {len(warnings)} missing asset(s) — those images will render broken")
     return 0
 
 
@@ -390,7 +421,11 @@ def check() -> int:
         "summary": "s", "tags": ["android"], "slug": "s", "body": "# Head\n\n```python\nprint(1)\n```",
     }
     slugs = {"s": "s"}
-    out = post(meta, 2026, slugs)
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as td:
+        warns: list[str] = []
+        out = post(meta, 2026, slugs, Path(td), warns)
     assert "T &amp; &lt;x&gt;" in out, "title not escaped"
     assert 'id="head"' in out, "toc ids missing"
     assert 'class="language-python"' in out, "fenced code broken"
@@ -408,6 +443,24 @@ def check() -> int:
     assert obsidian_to_md("see [[Other Note]]", {"other-note": "x"}) == "see [Other Note](../other-note/)", "wikilink broken"
     assert obsidian_to_md("see [[Other Note]]", {}) == "see Other Note", "dangling wikilink broken"
     assert "<mark>hi</mark>" in obsidian_to_md("==hi==", slugs), "highlight broken"
+
+    # Images: present files get copied and URL-encoded, missing ones warn
+    with tempfile.TemporaryDirectory() as td:
+        warns = []
+        got = resolve_images('<img src="missing shot.png" />', Path(td), "p", warns)
+        assert got == '<img src="missing shot.png" />' and warns, "missing image not flagged"
+
+        (SRC / "_check image.png").write_bytes(b"x")
+        try:
+            warns = []
+            got = resolve_images('<img src="_check image.png" />', Path(td), "p", warns)
+            assert 'src="_check%20image.png"' in got and not warns, "existing image not resolved"
+            assert (Path(td) / "_check image.png").exists(), "image not copied"
+        finally:
+            (SRC / "_check image.png").unlink()
+
+        remote = '<img src="https://x/y.png" />'
+        assert resolve_images(remote, Path(td), "p", warns) == remote, "remote image rewritten"
 
     # Frontmatter fallbacks
     assert to_date("2026-05-27", date(2000, 1, 1)) == date(2026, 5, 27)

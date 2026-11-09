@@ -45,6 +45,28 @@ Straight from the vault, no cleanup needed:
 | `%%comment%%` | removed |
 | `> [!note]` | stays a blockquote (callout title is visible) |
 
+## Images
+
+Obsidian embeds work, but **the image file has to be in the repo too** — pasting the `.md`
+alone leaves the embed pointing at nothing:
+
+```
+![[Pasted image 20261109123553.png]]
+```
+
+Drop the PNG anywhere under `content/` (`content/posts/` or `content/attachments/` — the
+build searches both, and copies the file next to the post). The build prints a warning for
+any embed whose file it can't find, so a missing image shows up in the Action log instead
+of shipping as a broken box.
+
+Give it alt text with a pipe — it becomes the `<img alt>` and feeds SEO:
+
+```
+![[Pasted image 20261109123553.png|Benchmark scores across Code, Web and Office]]
+```
+
+A numeric pipe value (`|300`) is treated as an Obsidian size hint and ignored.
+
 ## Rules
 
 - Never edit `blog/*/index.html` by hand — the next build overwrites it.
